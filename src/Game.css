@@ -1,0 +1,45 @@
+.Game {
+  padding: 24px;
+}
+
+.Game:focus {
+  outline: none;
+}
+
+.Game__Table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+.Game__Cell {
+  /* position: relative;
+  display: inline-block; */
+  padding: 8px;
+  border: 1px solid #C0C0C0;
+  line-height: 1;
+}
+
+.Game__Cell:nth-child(3n+3) {  
+  border-right-color: black;
+}
+
+.Game__TableRow:nth-child(3n+3) .Game__Cell {
+  border-bottom-color: black;
+}
+
+
+.Game__Cell::before {
+  content: '\00a0';
+  /* display: block; */
+	/* padding-top: 100%; */
+}
+
+.Game__Cell[data-hint="true"] {
+  font-weight: bold;
+}
+
+.Game__Cell[data-selected="true"] {
+  outline: none;
+  background-color: #74B3CE;
+}
