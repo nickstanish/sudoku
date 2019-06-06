@@ -1,5 +1,6 @@
 import React from 'react';
 import './Game.css';
+import { ReactComponent as DeleteIcon } from './delete.svg' ;
 
 const Sudoku = window.sudoku;
 
@@ -11,6 +12,13 @@ const difficulties = [
   'insane',
   'inhuman'
 ]
+
+function addTouchListener() {
+  window.addEventListener('touchstart', function onFirstTouch() {
+    document.body.classList.add('is-touch');
+    window.removeEventListener('touchstart', onFirstTouch, false);
+  }, false);
+}
 
 class SudokuGame {
   constructor(difficulty = difficulties[1], _data) {
@@ -120,12 +128,18 @@ class Game extends React.Component {
       case '8':
       case '9': {
         const value = event.key === 'Backspace' ? '' : event.key;
-        this.setState({ sudoku: this.state.sudoku.updateCell(this.state.cursor, value) })
+        this.updateValue(value);
         break;
       }
       default: {
         break;
       }
+    }
+  }
+
+  updateValue(value) {
+    if (this.state.cursor) {
+      this.setState({ sudoku: this.state.sudoku.updateCell(this.state.cursor, value) })
     }
   }
 
@@ -156,7 +170,7 @@ class Game extends React.Component {
     const gameRows = cellsToRows(this.state.sudoku.getCells());
     return (
       <div>
-        <div className="Game" tabIndex="0" onKeyDown={this.onKeyDown} onBlur={this.clearCursor}>
+        <div className="Game" tabIndex="0" onKeyDown={this.onKeyDown}>
           <table className="Game__Table">
             <tbody>
               { 
@@ -184,10 +198,26 @@ class Game extends React.Component {
             </tbody>
           </table>
         </div>
-        <div>
-          { this.state.sudoku.isSolved() &&
-            <h2>Complete!</h2>
-          }
+        {this.state.sudoku.isSolved() &&
+          <h2>Complete!</h2>
+        }
+        <div className="Game__Numpad">
+          <div className="Game__NumButtonContainer">
+            <button className="Game__NumButton" onClick={() => this.updateValue('1')}>1</button>
+            <button className="Game__NumButton" onClick={() => this.updateValue('2')}>2</button>
+            <button className="Game__NumButton" onClick={() => this.updateValue('3')}>3</button>
+            <button className="Game__NumButton" onClick={() => this.updateValue('4')}>4</button>
+            <button className="Game__NumButton" onClick={() => this.updateValue('5')}>5</button>
+            <button className="Game__NumButton" onClick={() => this.updateValue('6')}>6</button>
+            <button className="Game__NumButton" onClick={() => this.updateValue('7')}>7</button>
+            <button className="Game__NumButton" onClick={() => this.updateValue('8')}>8</button>
+            <button className="Game__NumButton" onClick={() => this.updateValue('9')}>9</button>
+            <div className="Game__NumButton"></div>
+            <button className="Game__NumButton" onClick={() => this.updateValue('')}><span><DeleteIcon /></span></button>
+            <div className="Game__NumButton"></div>
+          </div>
+        </div>
+        <div className="Game__ButtonBar">
           <button onClick={this.solve}>Solve</button>
           <button onClick={this.newGame}>New Game</button>
         </div>

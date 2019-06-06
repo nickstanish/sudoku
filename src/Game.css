@@ -10,6 +10,8 @@
   margin: 0 auto;
   border-collapse: collapse;
   border: 1px solid black;
+  width: 300px;
+  box-shadow: 1px 2px 6px rgba(0,0,0,0.1);
 }
 
 .Game__Cell {
@@ -24,10 +26,17 @@
   border-right-color: black;
 }
 
+.Game__Cell:first-child {  
+  border-left-color: black;
+}
+
+.Game__TableRow:first-child .Game__Cell {
+  border-top-color: black;
+}
+
 .Game__TableRow:nth-child(3n+3) .Game__Cell {
   border-bottom-color: black;
 }
-
 
 .Game__Cell::before {
   content: '\00a0';
@@ -42,4 +51,67 @@
 .Game__Cell[data-selected="true"] {
   outline: none;
   background-color: #74B3CE;
+}
+
+.Game__Numpad {
+  background-color: white;
+  max-width: 300px;
+  margin: 0 auto;
+  margin-top: 16px;
+}
+
+.Game__NumButtonContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Game__NumButton {
+  cursor: pointer;
+  padding: 12px;
+  -webkit-appearance: none;
+  background: unset;
+  background-image: unset;
+  box-shadow: unset;
+  margin: unset;
+  border: 1px solid #d2d2d2;
+  line-height: 1;
+  font-size: 16px;
+  width: 33.3%;
+}
+
+button.Game__NumButton:hover,
+button.Game__NumButton:active {
+  background-color: #eee;
+}
+
+.Game__NumButton .feather {
+  height: 16px;
+  width: 16px;
+  vertical-align: bottom;
+}
+
+.Game__ButtonBar {
+  margin: 16px 0;
+}
+
+.Game__ButtonBar button + button {
+  margin-left: 8px;
+}
+
+@media only screen and (max-width: 320px)  {
+  .Game {
+    padding: 5px;
+  }
+}
+
+@media only screen and (max-height: 480px)  {
+  .Game__NumButton {
+    padding: 6px;
+    font-size: 14px;
+  }
+
+  .Game__NumButton .feather {
+    height: 14px;
+    width: 14px;
+  }
 }

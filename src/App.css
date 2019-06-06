@@ -14,3 +14,21 @@ html {
 .App-link {
   color: #61dafb;
 }
+
+.feather {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.touch-only {
+  display: none;
+}
+
+.is-touch .touch-only {
+  display: initial;
+}
