@@ -13,12 +13,12 @@ const difficulties = [
   'inhuman'
 ]
 
-function addTouchListener() {
-  window.addEventListener('touchstart', function onFirstTouch() {
-    document.body.classList.add('is-touch');
-    window.removeEventListener('touchstart', onFirstTouch, false);
-  }, false);
-}
+// function addTouchListener() {
+//   window.addEventListener('touchstart', function onFirstTouch() {
+//     document.body.classList.add('is-touch');
+//     window.removeEventListener('touchstart', onFirstTouch, false);
+//   }, false);
+// }
 
 class SudokuGame {
   constructor(difficulty = difficulties[1], _data) {
@@ -138,7 +138,7 @@ class Game extends React.Component {
   }
 
   updateValue(value) {
-    if (this.state.cursor) {
+    if (this.state.cursor !== null) {
       this.setState({ sudoku: this.state.sudoku.updateCell(this.state.cursor, value) })
     }
   }
