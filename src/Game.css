@@ -98,6 +98,10 @@ button.Game__NumButton:active {
   margin-left: 8px;
 }
 
+.Game__BottomBar p {
+  font-size: 12px;
+}
+
 @media only screen and (max-width: 320px)  {
   .Game {
     padding: 5px;

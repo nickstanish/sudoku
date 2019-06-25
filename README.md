@@ -1,3 +1,6 @@
+# Sudoku
+React Sudoku with difficulty based on human techniques needed to solve the puzzle.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -66,3 +69,9 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+
+## Credits
+
+- Whitepaper https://www.cs.uaf.edu/2008/mcm/sudoku_2008mcm_halliday_rutter_stjohn.pdf
+- QQWing https://github.com/stephenostermiller/qqwing
