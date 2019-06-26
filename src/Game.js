@@ -1,6 +1,7 @@
 import React from 'react';
 import './Game.css';
 import { ReactComponent as DeleteIcon } from './delete.svg' ;
+import { ReactComponent as PencilIcon } from './edit-2.svg';
 // import SudokuGame from './adapters/sudoku-adapter';
 import SudokuGame from './adapters/qqwing-adapter';
 
@@ -25,7 +26,9 @@ class Game extends React.Component {
     super(props);
     this.state = {
       sudoku: new SudokuGame(),
-      cursor: null
+      cursor: null,
+      pencilMode: false,
+      pencils: {}
     }
   }
 
@@ -46,6 +49,11 @@ class Game extends React.Component {
       }
       case 'ArrowRight': {
         this.setState({ cursor: (81 + this.state.cursor + 1) % 81 });
+        break;
+      }
+      case 'p': 
+      case 'P': {
+        this.togglePencilMode();
         break;
       }
       case 'Backspace':
@@ -70,7 +78,25 @@ class Game extends React.Component {
 
   updateValue(value) {
     if (this.state.cursor !== null) {
-      this.setState({ sudoku: this.state.sudoku.updateCell(this.state.cursor, value) })
+      if (this.state.pencilMode) {
+        if (value !== '') {
+          const currentValues = this.state.pencils[this.state.cursor];
+          const currentPencils = new Set(currentValues);
+          if (currentPencils.has(value)) {
+            currentPencils.delete(value);
+          } else {
+            currentPencils.add(value);
+          }
+          this.setState({ 
+            pencils: { 
+              ...this.state.pencils, 
+              [this.state.cursor]: currentPencils 
+            } 
+          });
+        }
+      } else {
+        this.setState({ sudoku: this.state.sudoku.updateCell(this.state.cursor, value) })
+      }
     }
   }
 
@@ -93,8 +119,13 @@ class Game extends React.Component {
   newGame = () => {
     this.setState({
       sudoku: new SudokuGame(),
-      cursor: null
+      cursor: null,
+      pencils: {}
     });
+  }
+
+  togglePencilMode = () => {
+    this.setState({ pencilMode: !this.state.pencilMode });
   }
 
   render() {
@@ -115,9 +146,25 @@ class Game extends React.Component {
                             onClick: () => this.updateCursor(cell)
                           };
 
+                          const cellPencils = this.state.pencils[cell.index];
+
                           return (
                             <td className="Game__Cell" key={cell.index} data-hint={cell.hint} {...cellProps}>
                               {cell.value}
+                              { cell.value === '' && cellPencils && 
+                                <ul className="Game__Cell__Pencils">
+                                  { 
+                                    Array(9).fill().map((_, index) => {
+                                      const value = index + 1;
+                                      return (
+                                        <li className="Pencils__Pencil" key={index}>
+                                          <span>{cellPencils.has(value.toString()) ? value : null}</span>
+                                        </li>
+                                      );
+                                    }) 
+                                  }
+                                </ul>
+                              }
                             </td>
                           );
                         })
@@ -144,8 +191,8 @@ class Game extends React.Component {
             <button className="Game__NumButton" onClick={() => this.updateValue('8')}>8</button>
             <button className="Game__NumButton" onClick={() => this.updateValue('9')}>9</button>
             <div className="Game__NumButton"></div>
-            <button className="Game__NumButton" onClick={() => this.updateValue('')}><span><DeleteIcon /></span></button>
-            <div className="Game__NumButton"></div>
+            <button className="Game__NumButton" onClick={() => this.updateValue('')}><span><DeleteIcon aria-label="Delete" /></span></button>
+            <button className="Game__NumButton" data-active={this.state.pencilMode} onClick={this.togglePencilMode} ><span><PencilIcon aria-label="Pencil" /></span></button>
           </div>
         </div>
         <div className="Game__BottomBar">

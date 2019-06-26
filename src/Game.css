@@ -12,14 +12,38 @@
   border: 1px solid black;
   width: 300px;
   box-shadow: 1px 2px 6px rgba(0,0,0,0.1);
+  table-layout: fixed;
 }
 
 .Game__Cell {
-  /* position: relative;
-  display: inline-block; */
   padding: 8px;
   border: 1px solid #C0C0C0;
   line-height: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.Game__Cell__Pencils {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.Pencils__Pencil {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 10px;
+  width: 33%;
+}
+
+.Pencils__Pencil::before {
+  content: '\00a0';
 }
 
 .Game__Cell:nth-child(3n+3) {  
@@ -40,8 +64,6 @@
 
 .Game__Cell::before {
   content: '\00a0';
-  /* display: block; */
-	/* padding-top: 100%; */
 }
 
 .Game__Cell[data-hint="true"] {
@@ -82,6 +104,12 @@
 button.Game__NumButton:hover,
 button.Game__NumButton:active {
   background-color: #eee;
+}
+
+.Game__NumButton[data-active="true"] {
+  background-color: #eee;
+  box-shadow: inset 0px -1px 0px #74B3CE;
+  color: #74B3CE;
 }
 
 .Game__NumButton .feather {
