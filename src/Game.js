@@ -4,6 +4,7 @@ import { ReactComponent as DeleteIcon } from './delete.svg' ;
 import { ReactComponent as PencilIcon } from './edit-2.svg';
 // import SudokuGame from './adapters/sudoku-adapter';
 import SudokuGame from './adapters/qqwing-adapter';
+import Timer from './Timer';
 
 
 // function addTouchListener() {
@@ -26,6 +27,8 @@ class Game extends React.Component {
     super(props);
     this.state = {
       sudoku: new SudokuGame(),
+      startAt: new Date(),
+      completedAt: null,
       cursor: null,
       pencilMode: false,
       pencils: {}
@@ -95,7 +98,15 @@ class Game extends React.Component {
           });
         }
       } else {
-        this.setState({ sudoku: this.state.sudoku.updateCell(this.state.cursor, value) })
+        const nextState = {
+          sudoku: this.state.sudoku.updateCell(this.state.cursor, value)
+        };
+
+        if (nextState.sudoku.isSolved()) {
+          nextState.completedAt = new Date();
+        }
+
+        this.setState(nextState)
       }
     }
   }
@@ -113,12 +124,17 @@ class Game extends React.Component {
   }
 
   solve = () => {
-    this.setState({ sudoku: this.state.sudoku.clone({ board: this.state.sudoku.solve() }) })
+    this.setState({ 
+      sudoku: this.state.sudoku.clone({ board: this.state.sudoku.solve() }),
+      completedAt: new Date()
+    });
   }
 
   newGame = () => {
     this.setState({
       sudoku: new SudokuGame(),
+      startAt: new Date(),
+      completedAt: null,
       cursor: null,
       pencils: {}
     });
@@ -132,6 +148,14 @@ class Game extends React.Component {
     const gameRows = cellsToRows(this.state.sudoku.getCells());
     return (
       <div>
+        <header className="Game__Header">
+          <div>
+            { this.state.sudoku.getDifficulty() }
+          </div>
+          <div>
+            <Timer startAt={this.state.startAt} stopAt={this.state.completedAt} />
+          </div>
+        </header>
         <div className="Game" tabIndex="0" onKeyDown={this.onKeyDown}>
           <table className="Game__Table">
             <tbody>
@@ -176,7 +200,7 @@ class Game extends React.Component {
             </tbody>
           </table>
         </div>
-        {this.state.sudoku.isSolved() &&
+        {this.state.completedAt !== null &&
           <h2>Complete!</h2>
         }
         <div className="Game__Numpad">
@@ -194,13 +218,6 @@ class Game extends React.Component {
             <button className="Game__NumButton" onClick={() => this.updateValue('')}><span><DeleteIcon aria-label="Delete" /></span></button>
             <button className="Game__NumButton" data-active={this.state.pencilMode} onClick={this.togglePencilMode} ><span><PencilIcon aria-label="Pencil" /></span></button>
           </div>
-        </div>
-        <div className="Game__BottomBar">
-          <p>
-            <strong>Difficulty: </strong>
-            { this.state.sudoku.getDifficulty() }
-          </p>
-          
         </div>
         <div className="Game__ButtonBar">
           <button onClick={this.solve}>Solve</button>

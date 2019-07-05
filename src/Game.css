@@ -1,5 +1,5 @@
 .Game {
-  padding: 24px;
+  user-select: none;
 }
 
 .Game:focus {
@@ -99,6 +99,7 @@
   line-height: 1;
   font-size: 16px;
   width: 33.3%;
+  user-select: none;
 }
 
 button.Game__NumButton:hover,
@@ -126,8 +127,14 @@ button.Game__NumButton:active {
   margin-left: 8px;
 }
 
-.Game__BottomBar p {
+.Game__Header {
   font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+  margin: 0 auto;
+  padding: 8px 0;
+  line-height: 1.333;
 }
 
 @media only screen and (max-width: 320px)  {
