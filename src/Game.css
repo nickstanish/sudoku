@@ -68,6 +68,7 @@
 
 .Game__Cell[data-hint="true"] {
   font-weight: bold;
+  background-color: #eee;
 }
 
 .Game__Cell[data-selected="true"] {
