@@ -1,10 +1,14 @@
 import React from 'react';
 import './Game.css';
+import Cell from './components/Cell';
+import CellGroup from './components/CellGroup';
+import Grid from './components/Grid';
 import { ReactComponent as DeleteIcon } from './delete.svg' ;
 import { ReactComponent as PencilIcon } from './edit-2.svg';
 // import SudokuGame from './adapters/sudoku-adapter';
 import SudokuGame from './adapters/qqwing-adapter';
 import Timer from './Timer';
+import { groupBoxes } from './utils/sudoku';
 
 
 // function addTouchListener() {
@@ -14,13 +18,6 @@ import Timer from './Timer';
 //   }, false);
 // }
 
-function cellsToRows(cells) {
-  const rows = [];
-  for (let i = 0; i < 9; i++) {
-    rows.push(cells.slice(i * 9, (i + 1) * 9));
-  }
-  return rows;
-}
 
 class Game extends React.Component {
   constructor(props) {
@@ -54,7 +51,7 @@ class Game extends React.Component {
         this.setState({ cursor: (81 + this.state.cursor + 1) % 81 });
         break;
       }
-      case 'p': 
+      case 'p':
       case 'P': {
         this.togglePencilMode();
         break;
@@ -90,11 +87,11 @@ class Game extends React.Component {
           } else {
             currentPencils.add(value);
           }
-          this.setState({ 
-            pencils: { 
-              ...this.state.pencils, 
-              [this.state.cursor]: currentPencils 
-            } 
+          this.setState({
+            pencils: {
+              ...this.state.pencils,
+              [this.state.cursor]: currentPencils
+            }
           });
         }
       } else {
@@ -124,7 +121,7 @@ class Game extends React.Component {
   }
 
   solve = () => {
-    this.setState({ 
+    this.setState({
       sudoku: this.state.sudoku.clone({ board: this.state.sudoku.solve() }),
       completedAt: new Date()
     });
@@ -144,8 +141,21 @@ class Game extends React.Component {
     this.setState({ pencilMode: !this.state.pencilMode });
   }
 
+  renderCell = (cell) => {
+    return (
+      <Cell
+        key={cell.index}
+        selected={this.state.cursor === cell.index}
+        onSelect={() => this.updateCursor(cell)}
+        hint={cell.hint}
+        pencils={this.state.pencils[cell.index]}
+        value={cell.value}
+      />
+    );
+  }
+
   render() {
-    const gameRows = cellsToRows(this.state.sudoku.getCells());
+    const gameBoxes = groupBoxes(this.state.sudoku.getCells());
     return (
       <div>
         <header className="Game__Header">
@@ -157,48 +167,13 @@ class Game extends React.Component {
           </div>
         </header>
         <div className="Game" tabIndex="0" onKeyDown={this.onKeyDown}>
-          <table className="Game__Table">
-            <tbody>
-              { 
-                gameRows.map((row, index) => {
-                  return (
-                    <tr key={index} className="Game__TableRow">
-                      { 
-                        row.map((cell) => {
-                          const cellProps = {
-                            'data-selected': this.state.cursor === cell.index, 
-                            onClick: () => this.updateCursor(cell)
-                          };
-
-                          const cellPencils = this.state.pencils[cell.index];
-
-                          return (
-                            <td className="Game__Cell" key={cell.index} data-hint={cell.hint} {...cellProps}>
-                              {cell.value}
-                              { cell.value === '' && cellPencils && 
-                                <ul className="Game__Cell__Pencils">
-                                  { 
-                                    Array(9).fill().map((_, index) => {
-                                      const value = index + 1;
-                                      return (
-                                        <li className="Pencils__Pencil" key={index}>
-                                          <span>{cellPencils.has(value.toString()) ? value : null}</span>
-                                        </li>
-                                      );
-                                    }) 
-                                  }
-                                </ul>
-                              }
-                            </td>
-                          );
-                        })
-                      }
-                    </tr>
-                  );
-                })
+          <div className="Game__Table">
+            <Grid className="BoardGrid">
+              {
+                gameBoxes.map((group, index) => <CellGroup key={index} group={group} renderCell={this.renderCell} />)
               }
-            </tbody>
-          </table>
+            </Grid>
+          </div>
         </div>
         {this.state.completedAt !== null &&
           <h2>Complete!</h2>

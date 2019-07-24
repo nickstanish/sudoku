@@ -1,0 +1,22 @@
+.Game__Cell {
+  padding: 6px;
+  border: 1px solid #C0C0C0;
+  line-height: 1;
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.Game__Cell::before {
+  content: '\00a0';
+}
+
+.Game__Cell[data-hint="true"] {
+  font-weight: bold;
+  background-color: #eee;
+}
+
+.Game__Cell[data-selected="true"] {
+  outline: none;
+  background-color: #74B3CE;
+}
