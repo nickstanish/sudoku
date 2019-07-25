@@ -20,3 +20,8 @@
   outline: none;
   background-color: #74B3CE;
 }
+
+.Game__Cell--highlight:not([data-selected="true"]) {
+  border-color: #74B3CE;
+  color: #74B3CE;
+}

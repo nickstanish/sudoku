@@ -63,6 +63,27 @@ export default class SudokuGame {
     });
   }
 
+  getValueAt(index) {
+    if (index === null) {
+      return null;
+    }
+    const value = this.board.charAt(index);
+    return value === '.' ? '' : value;
+  }
+
+  getValueCounts() {
+    const counts = {};
+    Array.from(this.board).forEach((value) => {
+      const key = value === '.' ? '' : value
+      if (counts[key]) {
+        counts[key]++;
+      } else {
+        counts[key] = 1;
+      }
+    });
+    return counts;
+  }
+
   clone(mergeObj) {
     const data = Object.assign({}, this.toHash(), mergeObj);
     return new SudokuGame(null, data);

@@ -9,8 +9,19 @@ export default function Cell(props) {
     onClick: props.onSelect
   };
 
+  const shouldHighlight = props.hightlightValue && (
+    props.value === props.hightlightValue || (
+      props.pencils && props.pencils.has(props.hightlightValue)
+    )
+  );
+
+  let classes = ['Game__Cell']
+  if (shouldHighlight) {
+    classes.push('Game__Cell--highlight')
+  }
+
   return (
-    <div className="Game__Cell" {...cellProps}>
+    <div className={classes.join(' ')} {...cellProps}>
       {props.value}
       {props.value === '' && props.pencils &&
         <ul className="Game__Cell__Pencils">
@@ -35,5 +46,6 @@ Cell.propTypes = {
   onSelect: PropTypes.func,
   hint: PropTypes.bool,
   pencils: PropTypes.instanceOf(Set),
-  value: PropTypes.string
+  value: PropTypes.string,
+  hightlightValue: PropTypes.string
 };
