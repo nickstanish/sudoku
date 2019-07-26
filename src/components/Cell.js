@@ -11,7 +11,7 @@ export default function Cell(props) {
 
   const shouldHighlight = props.hightlightValue && (
     props.value === props.hightlightValue || (
-      props.pencils && props.pencils.has(props.hightlightValue)
+      !props.value && props.pencils && props.pencils.has(props.hightlightValue)
     )
   );
 

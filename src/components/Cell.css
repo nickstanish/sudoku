@@ -5,10 +5,11 @@
   position: relative;
   overflow: hidden;
   border-radius: 2px;
+  text-align: center;
 }
 
 .Game__Cell::before {
-  content: '\00a0';
+  content: '\200B';
 }
 
 .Game__Cell[data-hint="true"] {
@@ -17,11 +18,12 @@
 }
 
 .Game__Cell[data-selected="true"] {
-  outline: none;
-  background-color: #74B3CE;
+  outline: 2px solid #7486ce;
+  outline-offset: -1px;
+  background-color: rgba(116, 179, 206, 0.5);
 }
 
 .Game__Cell--highlight:not([data-selected="true"]) {
-  border-color: #74B3CE;
-  color: #74B3CE;
+  border-color: #7486ce;
+  color: #7486ce;
 }

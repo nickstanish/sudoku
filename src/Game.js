@@ -26,7 +26,7 @@ class Game extends React.Component {
       sudoku: new SudokuGame(),
       startAt: new Date(),
       completedAt: null,
-      cursor: null,
+      cursor: 0,
       pencilMode: false,
       pencils: {}
     };
@@ -41,7 +41,15 @@ class Game extends React.Component {
   }
 
   onKeyDown = (event) => {
-    event.preventDefault();
+    if ([
+      'ArrowUp',
+      'ArrowDown',
+      'ArrowLeft',
+      'ArrowRight',
+      'Backspace'
+    ].includes(event.key)) {
+      event.preventDefault();
+    }
     switch(event.key) {
       case 'ArrowUp': {
         this.setState({ cursor: (81 + this.state.cursor - 9) % 81 });
@@ -87,21 +95,23 @@ class Game extends React.Component {
   updateValue(value) {
     if (this.state.cursor !== null) {
       if (this.state.pencilMode) {
+        const currentValues = this.state.pencils[this.state.cursor];
+        const currentPencils = new Set(currentValues);
         if (value !== '') {
-          const currentValues = this.state.pencils[this.state.cursor];
-          const currentPencils = new Set(currentValues);
           if (currentPencils.has(value)) {
             currentPencils.delete(value);
           } else {
             currentPencils.add(value);
           }
-          this.setState({
-            pencils: {
-              ...this.state.pencils,
-              [this.state.cursor]: currentPencils
-            }
-          });
+        } else {
+          currentPencils.clear();
         }
+        this.setState({
+          pencils: {
+            ...this.state.pencils,
+            [this.state.cursor]: currentPencils
+          }
+        });
       } else {
         const nextState = {
           sudoku: this.state.sudoku.updateCell(this.state.cursor, value)
@@ -190,15 +200,20 @@ class Game extends React.Component {
         }
         <div className="Game__Numpad">
           <div className="Game__NumButtonContainer">
-            <button className="Game__NumButton" disabled={valueCounts[1] >= 9} onClick={() => this.updateValue('1')}>1</button>
-            <button className="Game__NumButton" disabled={valueCounts[2] >= 9} onClick={() => this.updateValue('2')}>2</button>
-            <button className="Game__NumButton" disabled={valueCounts[3] >= 9} onClick={() => this.updateValue('3')}>3</button>
-            <button className="Game__NumButton" disabled={valueCounts[4] >= 9} onClick={() => this.updateValue('4')}>4</button>
-            <button className="Game__NumButton" disabled={valueCounts[5] >= 9} onClick={() => this.updateValue('5')}>5</button>
-            <button className="Game__NumButton" disabled={valueCounts[6] >= 9} onClick={() => this.updateValue('6')}>6</button>
-            <button className="Game__NumButton" disabled={valueCounts[7] >= 9} onClick={() => this.updateValue('7')}>7</button>
-            <button className="Game__NumButton" disabled={valueCounts[8] >= 9} onClick={() => this.updateValue('8')}>8</button>
-            <button className="Game__NumButton" disabled={valueCounts[9] >= 9} onClick={() => this.updateValue('9')}>9</button>
+            {
+              Array(9).fill().map((_, index) => {
+                const value = index + 1;
+                return (
+                  <button
+                    key={value}
+                    className="Game__NumButton"
+                    disabled={valueCounts[value] >= 9}
+                    onClick={() => this.updateValue(value.toString())}>
+                    {value}
+                  </button>
+                );
+              })
+            }
             <div className="Game__NumButton"></div>
             <button className="Game__NumButton" onClick={() => this.updateValue('')}><span><DeleteIcon aria-label="Delete" /></span></button>
             <button className="Game__NumButton" data-active={this.state.pencilMode} onClick={this.togglePencilMode} ><span><PencilIcon aria-label="Pencil" /></span></button>
