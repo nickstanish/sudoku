@@ -19,11 +19,12 @@
 
 .Game__Cell[data-selected="true"] {
   outline: 2px solid #7486ce;
-  outline-offset: -1px;
+  outline-offset: -2px;
   background-color: rgba(116, 179, 206, 0.5);
 }
 
 .Game__Cell--highlight:not([data-selected="true"]) {
-  border-color: #7486ce;
+  outline: 2px solid #7486ce;
+  outline-offset: -2px;
   color: #7486ce;
 }
