@@ -25,11 +25,11 @@ const useHistory = (initial) => {
   }
 
   const applyNext = () => {
-    updateHistory(Math.min(cursor + 1, history.length));
+    updateCursor(Math.min(cursor + 1, history.length));
   }
 
   const applyPrevious = () => {
-    updateHistory(Math.max(cursor - 1, 0));
+    updateCursor(Math.max(cursor - 1, 0));
   }
 
   return {
@@ -38,7 +38,7 @@ const useHistory = (initial) => {
     applyNext,
     applyPrevious,
     addState,
-    hasNext: cursor < history.length,
+    hasNext: cursor < history.length - 1,
     hasPrevious: cursor > 0,
   }
 };
@@ -168,7 +168,11 @@ const GameContainer = (props) => {
   const gameProps = {
     completedAt,
     cursor,
+    hasUndo: hasPrevious,
+    hasRedo: hasNext,
     newGame,
+    onRedo: applyNext,
+    onUndo: applyPrevious,
     pencilMode,
     pencils,
     solve,
