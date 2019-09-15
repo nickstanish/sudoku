@@ -73,6 +73,10 @@ button.Game__NumButton:active {
   background-color: #eee;
 }
 
+button.Game__NumButton[data-all-values="true"] {
+  background-color: #d2d2d2;
+}
+
 .Game__NumButton[data-active="true"] {
   background-color: #eee;
   box-shadow: inset 0px -2px 0px #7486ce;
