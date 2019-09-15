@@ -5,6 +5,8 @@ import CellGroup from './components/CellGroup';
 import Grid from './components/Grid';
 import { ReactComponent as DeleteIcon } from './delete.svg' ;
 import { ReactComponent as PencilIcon } from './edit-2.svg';
+import { ReactComponent as ArrowLeftIcon } from './arrow-left.svg';
+import { ReactComponent as ArrowRightIcon } from './arrow-right.svg';
 import Timer from './Timer';
 import { groupBoxes } from './utils/sudoku';
 
@@ -58,8 +60,9 @@ const Game = (props) => {
               return (
                 <button
                   key={value}
-                  className="Game__NumButton"
-                  data-all-values={valueCounts[value] >= 9}
+                  className="Game__NumButton Game__NumKey"
+                  data-count={valueCounts[value] || 0}
+                  data-error={valueCounts[value] > 9}
                   onClick={() => props.updateValue(value.toString())}>
                   {value}
                 </button>
@@ -69,6 +72,13 @@ const Game = (props) => {
           <div className="Game__NumButton"></div>
           <button className="Game__NumButton" onClick={() => props.updateValue('')}><span><DeleteIcon aria-label="Delete" /></span></button>
           <button className="Game__NumButton" data-active={props.pencilMode} onClick={props.togglePencilMode} ><span><PencilIcon aria-label="Pencil" /></span></button>
+          <button className="Game__NumButton" onClick={props.onUndo} disabled={!props.hasUndo}>
+            <span><ArrowLeftIcon aria-label="Undo" /></span>
+          </button>
+          <div className="Game__NumButton"></div>
+          <button className="Game__NumButton" onClick={props.onRedo} disabled={!props.hasRedo}>
+            <span><ArrowRightIcon aria-label="Redo" /></span>
+          </button>
         </div>
       </div>
       <div className="Game__ButtonBar">
