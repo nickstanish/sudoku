@@ -75,3 +75,4 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 
 - Whitepaper https://www.cs.uaf.edu/2008/mcm/sudoku_2008mcm_halliday_rutter_stjohn.pdf
 - QQWing https://github.com/stephenostermiller/qqwing
+- Feather Icons https://feathericons.com/
